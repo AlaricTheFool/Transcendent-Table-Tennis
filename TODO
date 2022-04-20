@@ -1,8 +1,8 @@
 [ ] SFX
 [ ] Main Menu and Score Reset Stuff
-[ ] Ball increases in speed over time
+[X] Ball increases in speed over time
 [ ] Particle effects & Screen Shake
-[ ] Go back and figure out ECS? -> Togglebit recommends Legion ECS
+[X] Go back and figure out ECS? -> Togglebit recommends Legion ECS
 [ ] Powerups?
 [ ] AI
 [ ] Networking with Machbox?

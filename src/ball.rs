@@ -1,8 +1,9 @@
 use crate::prelude::*;
 
 pub const BALL_RADIUS: f32 = 16.;
-const INITIAL_SPEED: f32 = 5.;
-const MAX_INITIAL_V_SPEED: f32 = 5.;
+
+const SPEED_INCREASE_PER_BOUNCE: f32 = 2.;
+const MAX_H_SPEED: f32 = BALL_RADIUS * 2.;
 
 pub struct Ball {
     pub pos: Vec2,
@@ -47,7 +48,9 @@ impl Ball {
         self.velocity = Self::random_initial_velocity();
     }
 
-    fn random_initial_velocity() -> Vec2 {
-        Vec2::new(if thread_rng().gen::<bool>() { INITIAL_SPEED } else { -INITIAL_SPEED }, thread_rng().gen_range(-MAX_INITIAL_V_SPEED..MAX_INITIAL_V_SPEED))
+    pub fn bounce(&mut self, vert_velocity: f32) {
+        let current_speed = self.velocity.x.abs();
+        self.velocity.x = (current_speed + SPEED_INCREASE_PER_BOUNCE).min(MAX_H_SPEED) * -self.velocity.x.signum();
+        self.velocity.y = vert_velocity;
     }
 }

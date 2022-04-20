@@ -5,11 +5,6 @@ const PADDLE_HEIGHT: f32 = 128.;
 const PADDLE_WINDOW_EDGE_OFFSET: f32 = 16.;
 const PADDLE_SPEED: f32 = 10.0;
 
-pub enum Side {
-    Left,
-    Right,
-}
-
 pub struct Paddle {
     side: Side,
     pos: Vec2,
