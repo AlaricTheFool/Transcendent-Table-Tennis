@@ -29,6 +29,8 @@ pub fn create_collisions(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
                 
                 if correct_dir && x_aligned && y_aligned {
                     commands.push(((), BallCollision{ ball: *b_entity, vert_velocity: calculate_ball_bounce_dir(*paddle, *paddle_pos, *ball_pos)}));
+                    commands.push(((), CreateParticleBurstMessage{ position: *ball_pos }));
+
                 }
             });
     }); 

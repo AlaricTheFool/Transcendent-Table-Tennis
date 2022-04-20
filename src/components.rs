@@ -60,3 +60,24 @@ pub struct BallCollision {
     pub ball: Entity,
     pub vert_velocity: f32,
 }
+
+pub struct CreateParticleBurstMessage {
+    pub position: Vec2,
+}
+
+pub struct RenderRectangle {
+    pub size: Vec2,
+    pub color: Color,
+}
+
+pub struct Particle{
+    pub dir: Vec2,
+}
+
+impl Particle {
+    pub fn random_dir() -> Self {
+        Self {
+            dir: Vec2::new(thread_rng().gen_range(-1.0..1.0), thread_rng().gen_range(-1.0..1.0))
+        }
+    }
+}

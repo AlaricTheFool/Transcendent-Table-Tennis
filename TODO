@@ -1,7 +1,8 @@
 [ ] SFX
 [ ] Main Menu and Score Reset Stuff
 [X] Ball increases in speed over time
-[ ] Particle effects & Screen Shake
+[X] Particle effects
+[ ] Screen Shake
 [X] Go back and figure out ECS? -> Togglebit recommends Legion ECS
 [ ] Powerups?
 [ ] AI
