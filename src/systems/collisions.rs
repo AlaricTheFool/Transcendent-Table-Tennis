@@ -4,7 +4,7 @@ use crate::prelude::*;
 #[read_component(Ball)]
 #[read_component(Paddle)]
 #[read_component(Vec2)]
-pub fn create_collisions(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
+pub fn create_collisions(ecs: &mut SubWorld, commands: &mut CommandBuffer, #[resource] cam: &mut PongCam) {
     let mut balls = <(Entity, &Ball, &Vec2)>::query();
     let mut paddles = <(Entity, &Paddle, &Vec2)>::query();
 
@@ -30,7 +30,7 @@ pub fn create_collisions(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
                 if correct_dir && x_aligned && y_aligned {
                     commands.push(((), BallCollision{ ball: *b_entity, vert_velocity: calculate_ball_bounce_dir(*paddle, *paddle_pos, *ball_pos)}));
                     commands.push(((), CreateParticleBurstMessage{ position: *ball_pos }));
-
+                    cam.shake_frames = 10;
                 }
             });
     }); 

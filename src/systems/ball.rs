@@ -4,8 +4,8 @@ const MAX_INITIAL_V_SPEED: f32 = 5.;
 const INITIAL_BALL_SPEED: f32 = 5.;
 
 #[system(for_each)]
-pub fn draw_ball(pos: &Vec2, ball: &Ball) {
-    draw_circle(pos.x, pos.y, ball.radius, BALL_COLOR);
+pub fn draw_ball(pos: &Vec2, ball: &Ball, #[resource] cam: &PongCam) {
+    draw_circle(pos.x - cam.offset.x, pos.y - cam.offset.y, ball.radius, BALL_COLOR);
 }
 
 #[system(for_each)]

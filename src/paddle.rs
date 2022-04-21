@@ -1,7 +1,5 @@
 use crate::prelude::*;
 
-const PADDLE_WIDTH: f32 = 16.;
-const PADDLE_HEIGHT: f32 = 128.;
 const PADDLE_WINDOW_EDGE_OFFSET: f32 = 16.;
 const PADDLE_SPEED: f32 = 10.0;
 

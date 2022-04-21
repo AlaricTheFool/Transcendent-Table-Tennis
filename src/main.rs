@@ -1,6 +1,7 @@
 mod components;
 mod spawner;
 mod systems;
+mod camera;
 
 mod prelude {
     pub use macroquad::prelude::*; 
@@ -16,6 +17,9 @@ mod prelude {
 
     pub const WINDOW_WIDTH: i32 = 1280;
     pub const WINDOW_HEIGHT: i32 = 720;
+
+    pub const PADDLE_WIDTH: f32 = 16.;
+    pub const PADDLE_HEIGHT: f32 = 128.;    
 
     pub fn center_screen() -> Vec2 {
         Vec2::new(screen_width() / 2.0, screen_height() / 2.0)
@@ -36,6 +40,7 @@ mod prelude {
     pub use crate::components::*;
     pub use crate::spawner::*;
     pub use crate::systems::*;
+    pub use crate::camera::*;
 }
 
 use prelude::*;
@@ -76,6 +81,7 @@ impl State {
         let mut world = World::default();
 
         resources.insert(MatchState::BallToServe);
+        resources.insert(PongCam{ offset: Vec2::ZERO, shake_frames: 0 });
     
         spawn_ball(&mut world);
         spawn_paddles(&mut world);

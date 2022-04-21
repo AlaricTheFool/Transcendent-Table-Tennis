@@ -14,6 +14,10 @@ pub fn spawn_paddles(ecs: &mut World) {
         (
             center_screen(),
             Paddle::new(Side::Left),
+            RenderRectangle{
+                color: PADDLE_COLOR,
+                size: Vec2::new(PADDLE_WIDTH, PADDLE_HEIGHT)
+            }
         )
     );
 
@@ -21,6 +25,10 @@ pub fn spawn_paddles(ecs: &mut World) {
         (
             center_screen(),
             Paddle::new(Side::Right),
+            RenderRectangle{
+                color: PADDLE_COLOR,
+                size: Vec2::new(PADDLE_WIDTH, PADDLE_HEIGHT)
+            }
         )
     );
 }

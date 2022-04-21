@@ -6,17 +6,6 @@ const PADDLE_WINDOW_EDGE_OFFSET: f32 = 16.;
 const PADDLE_SPEED: f32 = 10.0;
 
 #[system(for_each)]
-pub fn draw_paddle(pos: &Vec2, paddle: &Paddle) {
-    draw_rectangle(
-        //TODO: USE paddle size values
-        pos.x - (PADDLE_WIDTH * 0.5), 
-        pos.y - (PADDLE_HEIGHT * 0.5), 
-        PADDLE_WIDTH, 
-        PADDLE_HEIGHT, 
-        PADDLE_COLOR)
-}
-
-#[system(for_each)]
 pub fn reset_paddle(pos: &mut Vec2, paddle: &Paddle) {
     let x_pos = match paddle.side {
         Side::Left => {
