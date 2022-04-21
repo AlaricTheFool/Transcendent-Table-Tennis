@@ -27,9 +27,10 @@ pub fn ball_movement(pos: &mut Vec2, ball: &mut Ball) {
 }
 
 #[system(for_each)]
-pub fn ball_scoring(pos: &Vec2, ball: &Ball, #[resource] match_state: &mut MatchState) {
+pub fn ball_scoring(pos: &Vec2, ball: &Ball, #[resource] match_state: &mut MatchState, #[resource] sounds: &MatchSounds) {
     if let Some(side) = is_ball_off_screen(*ball, *pos) {
         //TODO: More elaborate scoring code
+        play_sound_once(sounds.score_sounds[thread_rng().gen_range(0..3)]);
         *match_state = MatchState::BallToServe
     }
 }

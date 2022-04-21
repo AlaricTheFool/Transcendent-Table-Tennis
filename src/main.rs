@@ -5,6 +5,7 @@ mod camera;
 
 mod prelude {
     pub use macroquad::prelude::*; 
+    pub use macroquad::audio::*;
     pub use ::rand::prelude::*;
     pub use legion::*;
     pub use legion::world::SubWorld;
@@ -35,6 +36,11 @@ mod prelude {
     pub enum Side {
         Left,
         Right,
+    }
+
+    pub struct MatchSounds {
+        pub bounce_sounds: [Sound; 3],
+        pub score_sounds: [Sound; 3],
     }
 
     pub use crate::components::*;
@@ -82,7 +88,7 @@ impl State {
 
         resources.insert(MatchState::BallToServe);
         resources.insert(PongCam{ offset: Vec2::ZERO, shake_frames: 0 });
-    
+
         spawn_ball(&mut world);
         spawn_paddles(&mut world);
 
@@ -108,8 +114,24 @@ fn window_conf() -> Conf {
 #[macroquad::main(window_conf)]
 async fn main() {
 
+    set_pc_assets_folder("assets");
+
     let mut state = State::new();
 
+    let mut bounce_sounds: [Sound; 3] = [load_sound("sfx/uninitialized_sound.wav").await.expect("Failed to load sound."); 3];
+    for num in 1..=3 {
+        bounce_sounds[num - 1] = load_sound(&format!("sfx/ball_bounce/bounce_{}.wav", num)).await.expect("Failed to load sound.");
+    }
+
+    let mut score_sounds: [Sound; 3] = [load_sound("sfx/uninitialized_sound.wav").await.expect("Failed to load sound."); 3];
+    for num in 1..=3 {
+        score_sounds[num - 1] = load_sound(&format!("sfx/score/score_{}.wav", num)).await.unwrap();
+    }
+
+    state.resources.insert(MatchSounds{
+        bounce_sounds,
+        score_sounds,
+    });
     
     loop {
         let match_state = state.resources.get::<MatchState>().unwrap().clone();
