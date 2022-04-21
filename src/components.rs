@@ -51,8 +51,9 @@ impl Paddle {
         }
     }
 
-    pub fn convert_percentage_to_max_offset(&self, pct: f32) -> f32 {
-        (pct / 2.) * self.size.y
+    pub fn convert_offset_to_percentage(&self, offset: f32) -> f32 {
+        let max_offset = self.size.y / 2.0;
+        offset / max_offset
     }
 }
 
@@ -80,4 +81,16 @@ impl Particle {
             dir: Vec2::new(thread_rng().gen_range(-1.0..1.0), thread_rng().gen_range(-1.0..1.0))
         }
     }
+}
+
+pub struct PlayerController {
+    pub up_key: KeyCode,
+    pub down_key: KeyCode,
+}
+
+pub struct AIController;
+
+pub struct PaddleMove {
+    pub paddle: Entity,
+    pub dir: f32,
 }

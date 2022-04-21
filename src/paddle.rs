@@ -100,7 +100,7 @@ impl Paddle {
         }
     }
 
-    fn convert_percentage_to_max_offset(pct: f32) -> f32 {
+    fn convert_offset_to_percentage(pct: f32) -> f32 {
         (pct / 2.) * PADDLE_HEIGHT
     }
 }

@@ -21,9 +21,15 @@ pub fn reset_paddle(pos: &mut Vec2, paddle: &Paddle) {
 }
 
 #[system(for_each)]
-pub fn move_paddle(pos: &mut Vec2, paddle: &Paddle) {
-    let is_up = is_key_down(paddle.up_key);
-    let is_down = is_key_down(paddle.down_key);
+pub fn control_player_paddles(
+    entity: &Entity, 
+    pos: &mut Vec2, 
+    paddle: &Paddle, 
+    controller: &PlayerController, 
+    commands: &mut CommandBuffer
+) {
+    let is_up = is_key_down(controller.up_key);
+    let is_down = is_key_down(controller.down_key);
     
     let paddle_dir = match (is_up, is_down) {
         (true, false) => -1.0, // up
@@ -31,7 +37,40 @@ pub fn move_paddle(pos: &mut Vec2, paddle: &Paddle) {
         (_, _) => 0.0          // up and down or neither
     };
 
-    pos.y += paddle_dir * PADDLE_SPEED;
+    commands.push(((), PaddleMove{ paddle: *entity, dir: paddle_dir }));
+}
 
-    pos.y = pos.y.clamp(0.0 + (PADDLE_HEIGHT / 2.0), screen_height() - (PADDLE_HEIGHT / 2.0));
+#[system]
+#[read_component(Vec2)]
+#[read_component(Paddle)]
+#[read_component(AIController)]
+#[read_component(Ball)]
+pub fn control_ai_paddle(ecs: &mut SubWorld, commands: &mut CommandBuffer) {
+    let mut ai_paddles = <(Entity, &Vec2, &Paddle, &AIController)>::query();
+    let mut balls = <(&Vec2, &Ball)>::query();
+
+    let (ball_pos, _) = balls.iter(ecs).nth(0).unwrap();
+    
+    ai_paddles.iter(ecs).for_each(|(entity, pos, _, _)| {
+        if (ball_pos.y - pos.y).abs() > 11.0 {
+            let dir = (ball_pos.y - pos.y).signum();
+            commands.push(((), PaddleMove{ paddle: *entity, dir }));
+        }
+    });
+}
+
+#[system(for_each)]
+#[read_component(Paddle)]
+#[write_component(Vec2)]
+pub fn move_paddles(entity: &Entity, move_message: &PaddleMove, ecs: &mut SubWorld, commands: &mut CommandBuffer) {
+    if let Ok(paddle_pos) = ecs
+        .entry_mut(move_message.paddle)
+        .unwrap()
+        .get_component_mut::<Vec2>()
+        {
+            paddle_pos.y += move_message.dir * PADDLE_SPEED;
+            paddle_pos.y = paddle_pos.y.clamp(0.0 + (PADDLE_HEIGHT / 2.0), screen_height() - (PADDLE_HEIGHT / 2.0));
+        }
+    
+    commands.remove(*entity)
 }

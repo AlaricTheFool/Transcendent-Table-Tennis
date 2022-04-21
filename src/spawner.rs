@@ -17,6 +17,10 @@ pub fn spawn_paddles(ecs: &mut World) {
             RenderRectangle{
                 color: PADDLE_COLOR,
                 size: Vec2::new(PADDLE_WIDTH, PADDLE_HEIGHT)
+            },
+            PlayerController {
+                up_key: KeyCode::W,
+                down_key: KeyCode::S,
             }
         )
     );
@@ -28,7 +32,8 @@ pub fn spawn_paddles(ecs: &mut World) {
             RenderRectangle{
                 color: PADDLE_COLOR,
                 size: Vec2::new(PADDLE_WIDTH, PADDLE_HEIGHT)
-            }
+            },
+            AIController
         )
     );
 }

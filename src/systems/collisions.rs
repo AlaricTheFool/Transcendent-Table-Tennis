@@ -55,10 +55,11 @@ pub fn bounce_balls(entity: &Entity, collision: &BallCollision, ecs: &mut SubWor
 fn calculate_ball_bounce_dir(paddle: Paddle, paddle_pos: Vec2, ball_pos: Vec2) -> f32 {
     let ball_v_offset = (ball_pos.y - paddle_pos.y).abs();
     let bounce_dir = (ball_pos.y - paddle_pos.y).signum();
+    let offset_pct = paddle.convert_offset_to_percentage(ball_v_offset);
 
-    if ball_v_offset < paddle.convert_percentage_to_max_offset(STRAIGHT_SHOT_AREA_PCT) {
+    if offset_pct < STRAIGHT_SHOT_AREA_PCT / 2.0 {
         0.
-    } else if ball_v_offset < paddle.convert_percentage_to_max_offset(STRAIGHT_SHOT_AREA_PCT + SHALLOW_ANGLE_AREA_PCT){
+    } else if offset_pct < SHALLOW_ANGLE_AREA_PCT / 2.0{
         SHALLOW_ANGLE_VELOCITY * bounce_dir
     } else {
         DEEP_ANGLE_VELOCITY * bounce_dir
@@ -68,7 +69,9 @@ fn calculate_ball_bounce_dir(paddle: Paddle, paddle_pos: Vec2, ball_pos: Vec2) -
 fn create_bounced_vector(speed: Vec2, vert_velocity: f32) -> Vec2 {
     let mut new_speed = speed;
     new_speed.x = (speed.x.abs() + SPEED_INCREASE_PER_BOUNCE).min(MAX_H_SPEED) * -speed.x.signum();
-    new_speed.y = vert_velocity;
+    let vert_multiplier = 1.0 + (speed.x.abs() / MAX_H_SPEED);
+
+    new_speed.y = vert_velocity * vert_multiplier;
     new_speed
 }
 
@@ -76,9 +79,8 @@ const DEEP_ANGLE_VELOCITY: f32 = 7.;
 const SHALLOW_ANGLE_VELOCITY: f32 = 3.5;
 
 // You could NOT use DEEP_BANK_SHOT since it's always going to be the else condition.
-const STRAIGHT_SHOT_AREA_PCT: f32 = 0.10;
-const DEEP_BANK_SHOT_AREA_PCT: f32 = 0.20;
-const SHALLOW_ANGLE_AREA_PCT: f32 = 1.0 - STRAIGHT_SHOT_AREA_PCT - DEEP_BANK_SHOT_AREA_PCT;
+const STRAIGHT_SHOT_AREA_PCT: f32 = 0.30;
+const SHALLOW_ANGLE_AREA_PCT: f32 = 0.50;
 
 const SPEED_INCREASE_PER_BOUNCE: f32 = 2.;
 
